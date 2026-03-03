@@ -8,12 +8,14 @@
 body {
     margin: 0;
     overflow: hidden;
-    background: radial-gradient(circle at center, #1b1f3b 0%, #0c1022 100%);
-    font-family: 'Georgia', serif;
+    background: url("background.png") no-repeat center center fixed;
+    background-size: cover;
+    font-family: Georgia, serif;
     color: #f6e6c2;
     text-align: center;
 }
 
+/* PASSWORD SCREEN */
 #passwordScreen {
     position: absolute;
     width: 100%;
@@ -43,6 +45,7 @@ button {
     cursor: pointer;
 }
 
+/* MAIN SCENE */
 #scene {
     display: none;
     width: 100%;
@@ -50,6 +53,7 @@ button {
     position: relative;
 }
 
+/* CHARACTERS */
 .character {
     position: absolute;
     bottom: 80px;
@@ -65,36 +69,33 @@ button {
     right: 5%;
 }
 
-#moon {
-    position: absolute;
-    top: 80px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 100px;
-    transition: transform 1s ease;
-}
-
+/* MESSAGE AREA */
 #message {
     position: absolute;
-    bottom: 40px;
+    bottom: 60px;
     width: 100%;
     font-size: 26px;
     opacity: 0;
     transition: opacity 2s ease;
 }
 
-.star {
-    position: absolute;
-    background: #f6e6c2;
-    width: 2px;
-    height: 2px;
+/* STAR BUTTONS */
+.starButton {
+    display: inline-block;
+    margin: 15px 25px;
+    padding: 25px 35px;
+    font-size: 22px;
     border-radius: 50%;
-    animation: twinkle 2s infinite alternate;
+    background: radial-gradient(circle, #fff6c5 0%, #f6e6c2 60%, #e0c77f 100%);
+    color: #0c1022;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 0 25px #f6e6c2;
 }
 
-@keyframes twinkle {
-    from { opacity: 0.2; }
-    to { opacity: 1; }
+.starButton:hover {
+    transform: scale(1.15);
+    box-shadow: 0 0 40px #fff6c5;
 }
 </style>
 </head>
@@ -109,18 +110,30 @@ button {
 
 <div id="scene">
 
-<div id="moon">🌕</div>
-
 <img src="girl.png" id="girl" class="character">
 <img src="boy.png" id="boy" class="character">
 
 <div id="message">
-Happy 1096 days with me, Poppy. 🌙
+
+    <div id="daysText">
+        Happy 1096 days with me, Poppy.
+    </div>
+
+    <div id="starChoices" style="display:none; margin-top:30px;">
+        <div class="starButton" onclick="fourthYear()">Yes</div>
+        <div class="starButton" onclick="fourthYear()">Of course</div>
+    </div>
+
+    <div id="finalPopup" style="display:none; margin-top:30px; font-size:24px;">
+        Then let us begin our fourth year together.
+    </div>
+
 </div>
 
 </div>
 
 <script>
+
 function checkPassword() {
     const input = document.getElementById("passwordInput").value;
     if (input === "kalyanamkazhikkam") {
@@ -152,20 +165,20 @@ document.getElementById("scene").onclick = function() {
     if (clicks === 4) {
         document.getElementById("girl").src = "kiss.png";
         document.getElementById("boy").style.display = "none";
-        document.getElementById("moon").innerHTML = "😊🌕";
         document.getElementById("message").style.opacity = "1";
+
+        setTimeout(function() {
+            document.getElementById("daysText").style.display = "none";
+            document.getElementById("starChoices").style.display = "block";
+        }, 3000);
     }
 };
 
-// Create stars
-for (let i = 0; i < 150; i++) {
-    let star = document.createElement("div");
-    star.className = "star";
-    star.style.top = Math.random() * window.innerHeight + "px";
-    star.style.left = Math.random() * window.innerWidth + "px";
-    star.style.animationDuration = (Math.random() * 2 + 1) + "s";
-    document.body.appendChild(star);
+function fourthYear() {
+    document.getElementById("starChoices").style.display = "none";
+    document.getElementById("finalPopup").style.display = "block";
 }
+
 </script>
 
 </body>
