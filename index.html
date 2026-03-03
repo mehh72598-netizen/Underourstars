@@ -8,7 +8,7 @@
 body {
     margin: 0;
     min-height: 100vh;
-    background-image: url("./background.PNG");
+    background-image: url("./background.png");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -58,18 +58,20 @@ button {
 /* TOP TEXT */
 #topText {
     position: absolute;
-    top: 50px;
+    top: 18%;
     width: 100%;
-    font-size: 36px;
+    font-size: 42px;
     font-weight: bold;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
     text-transform: uppercase;
 }
 
 /* QUESTION */
 #question {
-    margin-top: 20px;
-    font-size: 28px;
+    position: absolute;
+    top: 28%;
+    width: 100%;
+    font-size: 30px;
     font-weight: bold;
     display: none;
 }
@@ -77,8 +79,8 @@ button {
 /* CHARACTERS */
 .character {
     position: absolute;
-    bottom: 120px;
-    width: 320px;
+    bottom: 220px;
+    width: 450px;
     transition: all 0.8s ease;
 }
 
@@ -88,9 +90,11 @@ button {
 /* STAR BUTTONS */
 .starButton {
     display: inline-block;
-    margin: 20px;
-    padding: 25px 35px;
-    font-size: 22px;
+    margin-top: 60px;
+    margin-left: 40px;
+    margin-right: 40px;
+    padding: 28px 40px;
+    font-size: 24px;
     font-weight: bold;
     border-radius: 50%;
     background: radial-gradient(circle, #fff6c5 0%, #f6e6c2 60%, #e0c77f 100%);
@@ -101,7 +105,23 @@ button {
 }
 
 .starButton:hover {
-    transform: scale(1.1);
+    transform: scale(1.15);
+}
+
+/* YAY EFFECT */
+#yay {
+    position: absolute;
+    top: 45%;
+    width: 100%;
+    font-size: 70px;
+    font-weight: bold;
+    display: none;
+    animation: pop 0.6s ease forwards;
+}
+
+@keyframes pop {
+    0% { transform: scale(0.5); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
 }
 </style>
 </head>
@@ -122,10 +142,12 @@ HAPPY 1096 DAYS WITH ME, POPPY
 
 <div id="question">
 ARE YOU READY TO BEGIN OUR FOURTH YEAR?
-<br><br>
+<br>
 <div class="starButton" onclick="finalMessage()">YES</div>
 <div class="starButton" onclick="finalMessage()">OF COURSE</div>
 </div>
+
+<div id="yay">YAY ✨</div>
 
 <img src="girl.png" id="girl" class="character">
 <img src="boy.png" id="boy" class="character">
@@ -167,12 +189,11 @@ document.getElementById("scene").onclick = function() {
 };
 
 function finalMessage() {
-    document.getElementById("question").innerHTML =
-    "THEN LET US MAKE THIS YEAR EVEN MORE BEAUTIFUL.";
+    document.getElementById("question").style.display = "none";
+    document.getElementById("yay").style.display = "block";
 }
 
 </script>
 
 </body>
 </html>
-   
