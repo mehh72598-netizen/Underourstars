@@ -8,10 +8,11 @@
   <style>
     body {
       margin: 0;
-      background: radial-gradient(circle at top, #1c1f4a 0%, #0b0e2b 60%, #05071a 100%);
-      color: #f8e7c9;
-      font-family: 'Georgia', serif;
       overflow: hidden;
+      background: radial-gradient(circle at top, #1c1f4a 0%, #0b0e2b 70%, #05071a 100%);
+      font-family: Georgia, serif;
+      color: #f3d9a3;
+      cursor: pointer;
     }
 
     #password-screen {
@@ -22,36 +23,29 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      background: transparent;
-      z-index: 3;
-      text-align: center;
-    }
-
-    #password-screen h2 {
-      font-weight: 300;
-      letter-spacing: 2px;
-      margin-bottom: 20px;
-      color: #f3d9a3;
+      background: #0b0e2b;
+      z-index: 10;
+      cursor: default;
     }
 
     input {
       padding: 12px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid #f3d9a3;
-      color: #f8e7c9;
-      font-size: 16px;
-      text-align: center;
+      margin-top: 15px;
       border-radius: 25px;
+      border: 1px solid #f3d9a3;
+      background: transparent;
+      color: #f3d9a3;
+      text-align: center;
     }
 
     button {
       margin-top: 15px;
-      padding: 10px 25px;
-      background: transparent;
+      padding: 8px 20px;
+      border-radius: 25px;
       border: 1px solid #f3d9a3;
+      background: transparent;
       color: #f3d9a3;
       cursor: pointer;
-      border-radius: 25px;
       transition: 0.3s ease;
     }
 
@@ -60,51 +54,72 @@
       color: #0b0e2b;
     }
 
-    #main-content {
-      display: none;
+    #scene {
       position: relative;
-      z-index: 2;
+      width: 100vw;
+      height: 100vh;
+      display: none;
       text-align: center;
-      top: 35%;
     }
 
-    #main-content h1 {
-      font-size: 48px;
-      margin-bottom: 10px;
-      color: #f3d9a3;
-      letter-spacing: 3px;
-    }
-
-    #main-content p {
-      font-size: 20px;
-      font-style: italic;
-      color: #f8e7c9;
-      opacity: 0.85;
-    }
-
-    canvas {
+    #moon {
       position: absolute;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
+      top: 80px;
+      right: 150px;
+      font-size: 70px;
+      transition: 0.5s;
     }
 
-    .message {
+    #girl, #boy {
+      position: absolute;
+      bottom: 100px;
+      width: 180px;
+      transition: 0.7s ease;
+    }
+
+    #girl { left: 5%; }
+    #boy { right: 5%; }
+
+    #starMessage {
       position: absolute;
       bottom: 15%;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(10, 12, 40, 0.8);
-      padding: 20px 30px;
-      border-radius: 30px;
-      font-size: 16px;
-      color: #f3d9a3;
-      animation: fadeIn 1s forwards;
+      width: 100%;
+      text-align: center;
+      font-size: 18px;
+      opacity: 0;
+      transition: 0.5s;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translate(-50%, 10px); }
-      to { opacity: 1; transform: translate(-50%, 0); }
+    #message {
+      position: absolute;
+      top: 35%;
+      width: 100%;
+      font-size: 32px;
+      opacity: 0;
+      transition: 1s;
+    }
+
+    #nextQuestion {
+      margin-top: 20px;
+      font-size: 22px;
+      opacity: 0;
+      transition: 1s;
+    }
+
+    #buttons {
+      margin-top: 20px;
+      opacity: 0;
+      transition: 1s;
+    }
+
+    #finalPopup {
+      position: absolute;
+      top: 45%;
+      width: 100%;
+      text-align: center;
+      font-size: 34px;
+      opacity: 0;
+      transition: 1s;
     }
   </style>
 </head>
@@ -117,99 +132,109 @@
   <button onclick="checkPassword()">Enter</button>
 </div>
 
-<canvas id="stars"></canvas>
+<div id="scene">
 
-<div id="main-content">
-  <h1>When It Became Us</h1>
-  <p>A Love Story</p>
+  <div id="moon">🌙</div>
+
+  <!-- Replace these image links with your own later -->
+  <img id="girl" src="https://i.imgur.com/Q9qFt3m.png">
+  <img id="boy" src="https://i.imgur.com/Z8XbX8M.png">
+
+  <div id="starMessage"></div>
+
+  <div id="message">
+    Happy 1096 days with me, Poppy 💛
+    <div id="nextQuestion">Ready to write our fourth chapter?</div>
+    <div id="buttons">
+      <button onclick="celebrate()">Yes</button>
+      <button onclick="celebrate()">Of course</button>
+    </div>
+  </div>
+
+  <div id="finalPopup">Forever starting now, Poppy 💫</div>
+
 </div>
 
 <script>
 
-const correctPassword = "kalyamkazhikkam";
+const correctPassword = "kalyanamkazhikkam";
 
 function checkPassword() {
   const input = document.getElementById("passwordInput").value;
   if (input === correctPassword) {
     document.getElementById("password-screen").style.display = "none";
-    document.getElementById("main-content").style.display = "block";
-    startStars();
+    document.getElementById("scene").style.display = "block";
   } else {
     alert("That’s not it.");
   }
 }
 
-function startStars() {
-  const canvas = document.getElementById("stars");
-  const ctx = canvas.getContext("2d");
+let step = 0;
+let girl = document.getElementById("girl");
+let boy = document.getElementById("boy");
+let moon = document.getElementById("moon");
+let message = document.getElementById("message");
+let starMessage = document.getElementById("starMessage");
 
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+const starMessages = [
+  "I love you, Poppy.",
+  "You are the best.",
+  "I am so proud of you.",
+  "Thank you for choosing me.",
+  "Happy anniversary at last.",
+  "Still stuck with me.",
+  "You make everything better."
+];
 
-  let stars = [];
-  const messages = [
-    "The universe approved.",
-    "Even the moon smiled.",
-    "That night still glows.",
-    "We were written in starlight.",
-    "It was always you."
-  ];
+document.body.addEventListener("click", function() {
 
-  for (let i = 0; i < 220; i++) {
-    stars.push({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      radius: Math.random() * 2.2,
-      glow: Math.random() * 0.5 + 0.5,
-      clickable: Math.random() < 0.07
-    });
+  if(document.getElementById("scene").style.display === "block"){
+
+    if(step < 5){
+      step++;
+      girl.style.left = (5 + step * 10) + "%";
+      boy.style.right = (5 + step * 10) + "%";
+
+      starMessage.innerText = starMessages[Math.floor(Math.random() * starMessages.length)];
+      starMessage.style.opacity = 1;
+
+      setTimeout(() => {
+        starMessage.style.opacity = 0;
+      }, 2000);
+    }
+
+    if(step === 5){
+      girl.src = "https://i.imgur.com/W5b8KXK.png";
+      boy.style.display = "none";
+      moon.innerHTML = "🌙😊";
+      message.style.opacity = 1;
+
+      setTimeout(() => {
+        document.getElementById("nextQuestion").style.opacity = 1;
+        document.getElementById("buttons").style.opacity = 1;
+      }, 2000);
+    }
   }
 
-  function drawStars() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+});
 
-    stars.forEach(star => {
-      ctx.beginPath();
-      ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-      ctx.fillStyle = "rgba(255, 223, 150," + star.glow + ")";
-      ctx.shadowBlur = 8;
-      ctx.shadowColor = "#ffd27f";
-      ctx.fill();
-    });
+function celebrate(){
+  document.getElementById("finalPopup").style.opacity = 1;
 
-    requestAnimationFrame(drawStars);
+  for(let i=0;i<30;i++){
+    let spark = document.createElement("div");
+    spark.innerHTML = "✨";
+    spark.style.position = "absolute";
+    spark.style.left = Math.random()*100 + "%";
+    spark.style.top = Math.random()*100 + "%";
+    spark.style.fontSize = "20px";
+    spark.style.opacity = 1;
+    spark.style.transition = "2s";
+    document.body.appendChild(spark);
+
+    setTimeout(()=>{ spark.style.opacity = 0; },100);
+    setTimeout(()=>{ spark.remove(); },2000);
   }
-
-  canvas.addEventListener("click", function(event) {
-    const rect = canvas.getBoundingClientRect();
-    const mouseX = event.clientX - rect.left;
-    const mouseY = event.clientY - rect.top;
-
-    stars.forEach(star => {
-      const distance = Math.sqrt(
-        (mouseX - star.x) ** 2 +
-        (mouseY - star.y) ** 2
-      );
-
-      if (distance < 8 && star.clickable) {
-        showMessage(messages[Math.floor(Math.random() * messages.length)]);
-      }
-    });
-  });
-
-  drawStars();
-}
-
-function showMessage(text) {
-  const messageBox = document.createElement("div");
-  messageBox.className = "message";
-  messageBox.innerText = text;
-
-  document.body.appendChild(messageBox);
-
-  setTimeout(() => {
-    messageBox.remove();
-  }, 4000);
 }
 
 </script>
